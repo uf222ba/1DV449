@@ -5,10 +5,8 @@ require_once("sec.php");
 $u = $_POST['username'];
 $p = $_POST['password'];
 
-//var_dump(isUser($u, $p));
-//die();
-
 // Check if user is OK
+//
 if(isset($u) && isset($p) && isUser($u, $p)) {
 	// set the session
 	sec_session_start();

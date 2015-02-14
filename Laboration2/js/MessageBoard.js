@@ -12,6 +12,7 @@ var MessageBoard = {
 		    MessageBoard.textField = document.getElementById("inputText");
 		    MessageBoard.nameField = document.getElementById("inputName");
             MessageBoard.messageArea = document.getElementById("messagearea");
+            MessageBoard.hiddenToken = document.getElementById("inputToken");
 
             // Add eventhandlers
             document.getElementById("inputText").onfocus = function(e){ this.className = "focus"; }
@@ -28,7 +29,6 @@ var MessageBoard = {
                                                         return false;
                                                     }
                                                 }
-
     },
     getMessages:function() {
         console.log("INNE");
@@ -39,53 +39,46 @@ var MessageBoard = {
                 function: "getMessages", serial: MessageBoard.largestSerial
             },
             timeout: "6000",
-            cache: "false"
+            cache: "false",
+            async: true
 
         }).done(function(data) { // called when the AJAX call is ready
-            alert("Success!");
             data = JSON.parse(data);
 
             for (var mess in data) {
-                console.log("for");
                 var obj = data[mess];                       // Gör varje element i arrayen av returnerat data till ett objekt.
                 var text = obj.name + " said:\n" + obj.message;   // Texten som ska visas, namn + text läggs i strängen text
                 var mess = new Message(text, obj.timestamp); //new Message(text, new Date());
-                console.log("text" + text);
                 var messageID = MessageBoard.messages.push(mess) - 1;
                 MessageBoard.renderMessage(messageID);      // Skriv ut meddelandet i webbläsarfönstret.
-                console.log(text + " messID: " + messageID);
+                MessageBoard.largestSerial = obj.serial; // Sätt variabeln för det högsta id:t
             }
-            console.log(MessageBoard.largestSerial + " " + MessageBoard.messages.length);
-            MessageBoard.largestSerial = obj.serial; // Sätt variabeln för det högsta id:t
-
             document.getElementById("nrOfMessages").innerHTML = MessageBoard.messages.length + MessageBoard.prevNumOfMessages; // Hämtar antal element som finns i arrayen för att skriva ut det totala antalet meddelanden som finns.
             // Här behöver koden fixas för att lägga till det nya antalet meddelandet till det tidigare antalet
             MessageBoard.prevNumOfMessages = MessageBoard.messages.length;
             MessageBoard.messages = [];
-            console.log(MessageBoard.largestSerial + " " + MessageBoard.messages.length);
         }).fail(function(e) {
             console.log(e);
         }).always(function() {
-            console.log("new request")
             MessageBoard.getMessages();
         });
     },
     sendMessage:function(){
+
         if(MessageBoard.textField.value == "") return;
 
         // Make call to ajax
         $.ajax({
 			type: "POST",
 		  	url: "functions.php",
-		  	data: {function: "add", name:MessageBoard.nameField.value, message:MessageBoard.textField.value}
+            async: true,
+		  	data: {function: "add", name:MessageBoard.nameField.value, message:MessageBoard.textField.value, token:MessageBoard.hiddenToken.value}
         }).done(function(data) {
-		  alert("Your message is saved!");
             MessageBoard.nameField.value = "";
             MessageBoard.textField.value = "";
         }).fail(function(e) {
             console.log(e);
 		});
-
     },
     renderMessages: function(){
         // Remove all messages
@@ -134,7 +127,7 @@ var MessageBoard = {
 
         div.appendChild(spanClear);
 
-        MessageBoard.messageArea.appendChild(div);
+        MessageBoard.messageArea.insertBefore(div, MessageBoard.messageArea.firstChild); // Lägg till inläggen i början istället för i slutet
     },
     removeMessage: function(messageID){
 		if(window.confirm("Vill du verkligen radera meddelandet?")){
@@ -153,8 +146,49 @@ var MessageBoard = {
          alert(showTime);
     },
     logout: function() {
-        window.location = "index.php";
+        $.ajax({
+            type:"GET",
+            url:"functions.php",
+            data: {function: "logout"}
+        }).done(function(data) {
+            window.location = "index.php";
+        }).fail(function(e) {
+            console.log(e);
+        });
     }
 }
 
 window.onload = MessageBoard.init;
+
+function Message(message, date){
+
+    this.getText = function() {
+        return message;
+    }
+
+    this.setText = function(_text) {
+        message = text;
+    }
+
+    this.getDate = function() {
+        return date;
+    }
+
+    this.setDate = function(_date) {
+        date = date;
+    }
+
+}
+
+Message.prototype.toString = function(){
+    return this.getText()+" ("+this.getDate()+")";
+}
+
+Message.prototype.getHTMLText = function() {
+
+    return this.getText().replace(/[\n\r]/g, "<br />");
+}
+
+Message.prototype.getDateText = function() {
+    return this.getDate();
+}

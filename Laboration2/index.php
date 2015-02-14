@@ -12,8 +12,6 @@
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
-		<script src="js/bootstrap.js"></script>
-		
     <!-- Custom styles for this template -->
     <style>
 	body {
@@ -72,6 +70,8 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
       </form>
     </div> <!-- /container -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
   </body>
 </html>
 

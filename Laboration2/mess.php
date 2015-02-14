@@ -1,10 +1,10 @@
 <?php
-	require_once("get.php");
-    require_once("sec.php");
-
-    sec_session_start();    // Starta sessionen
-    checkUser();            // Kolla att användaren, webbläsare och IP-adress är ok
+require_once("get.php");
+require_once("sec.php");
+require_once("Token.php");
+checkUser();            // Kolla att användaren, webbläsare och IP-adress är ok
 ?>
+
 <!DOCTYPE html>
 <html lang="sv">
   <head>
@@ -19,10 +19,6 @@
     <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad-retina.png">
     <link rel="shortcut icon" href="pic/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-   
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/longpoll.js"></script>
-
 	<style type="text/css">
 	
 	body{
@@ -136,11 +132,8 @@ background-color: #F3FCE4;
 	
 	</style>
 	
-	<script src="js/jquery.js"></script>
-	<script src="MessageBoard.js"></script>
-	<script src="js/script.js"></script>
-	<script src="Message.js"></script>
-    
+
+
 	<title>Messy Labbage</title>
   </head>
 	  
@@ -157,13 +150,16 @@ background-color: #F3FCE4;
                 Name:<br /> <input id="inputName" type="text" name="name" /><br />
                 Message: <br />
                 <textarea name="mess" id="inputText" cols="55" rows="6"></textarea>
+                <input id="inputToken" type="hidden" name="token" value="<?php echo Token::generate(); ?>" />
                 <input class="btn btn-primary" type="button" id="buttonSend" value="Write your message" />
                 <span class="clear">&nbsp;</span>
 
             </div>
 
         </div>
-        
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+            <script src="js/MessageBoard.js"></script>
         <!-- This script is running to get the messages -->
 			<script>
 				$(document).ready(function() {

@@ -16,7 +16,7 @@ Innebär att förövaren lyckas mata in skadlig JavaScript-kod på en webbsida o
 Är en attack där den inloggade användaren luras av en förövare att genomföra händelser som användaren inte är medveten om. Förövaren kan alltså genomföra exempelvis köp o dylikt utan att den riktige användaren vet om det.    
 Åtgärd: Har implementerat "Synchronizer Token Pattern". Se referens.
 ##### 4. SQL Injections
-SQL injections innebär att förövaren lyckas lägga till sql-frågor i inmatningsfält så att denne kan manipulera och/eller kompromettera databasen. Exempelvis kan förövaren lägga beslag på användarkonton eller ta bort hela databasen etcetera. 
+SQL injections innebär att förövaren lyckas lägga till sql-frågor i inmatningsfält så att denne kan manipulera och/eller kompromettera databasen. Exempelvis kan förövaren lägga beslag på användarkonton eller ta bort hela databasen etcetera.   
 Åtgärder: Parametriserade frågor och tvättning av användarinmatade strängar.
 ##### 5. Inloggning
 Lösenord sparas i klartext i databasen.  

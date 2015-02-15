@@ -5,13 +5,18 @@ Körbar version finns på: [http://www.falkebo.com/1DV449/Lab2/index.php](http:/
 
 ### Del 1 - Säkerhetsproblem
 ##### 1. Session Hijacking
+Sessioner möjliggör för webbservern att hålla reda på användardata.
+Detta innebär att någon som fått tillgång till sessions-id:t kan använda det för att låtsas vara den riktige användaren på en webbplats. Ger förövaren möjlighet att göra allt som den riktige användaren kan göra på webbplatsen.   
 Åtgärder: Använd SSL eller TLS (dock ej tillämpbart i detta fall).  
-Spara IP-adressen och webbläsaren i sessionsvariabler vid inloggningen och jämför användarens mot sessionsvariablerna när sidorna hämtas. Ta bort sessionsvariabler och cookies vid utloggning.
+Spara IP-adressen och webbläsaren i sessionsvariabler vid inloggningen och jämför användarens mot sessionsvariablerna när sidorna hämtas. Generera ett nytt sessions-id varje gång användaren går till en ny sida. Ta bort sessionsvariabler och cookies vid utloggning.
 ##### 2. XSS - Cross Site Scripting
+Innebär att förövaren lyckas mata in skadlig JavaScript-kod på en webbsida och när den koden körs, så lurar den av användarna känslig information och/eller skadar användarna på ett eller annat sätt.  
 Åtgärd: En funktion som tvättar all text som är inmatad av användarna.
 ##### 3. CSRF - Cross Site Request Forgery
+Är en attack där den inloggade användaren luras av en förövare att genomföra händelser som användaren inte är medveten om. Förövaren kan alltså genomföra exempelvis köp o dylikt utan att den riktige användaren vet om det.    
 Åtgärd: Har implementerat "Synchronizer Token Pattern". Se referens.
 ##### 4. SQL Injections
+SQL injections innebär att förövaren lyckas lägga till sql-frågor i inmatningsfält så att denne kan manipulera och/eller kompromettera databasen. Exempelvis kan förövaren lägga beslag på användarkonton eller ta bort hela databasen etcetera. 
 Åtgärder: Parametriserade frågor och tvättning av användarinmatade strängar.
 ##### 5. Inloggning
 Lösenord sparas i klartext i databasen.  
@@ -25,6 +30,7 @@ Ingen säkerhet i applikationen. Det går exampelvis bra att gå direkt till mes
 Kod för att ta bort sessionen: [http://php.net/manual/en/function.session-destroy.php](http://php.net/manual/en/function.session-destroy.php)  
 Koden i följande video har använts för att implementera "Synchronizer Token Pattern": [https://www.youtube.com/watch?v=VflbINBabc4](https://www.youtube.com/watch?v=VflbINBabc4 )  
 OWASP Testing Guide 4.0 [https://www.owasp.org/images/5/52/OWASP_Testing_Guide_v4.pdf](https://www.owasp.org/images/5/52/OWASP_Testing_Guide_v4.pdf)  
+OWASP - [https://www.owasp.org](https://www.owasp.org)  
 W3Schoools - [http://www.w3schools.com/](http://www.w3schools.com/)  
 PHP manualen - [http://php.net/manual/en/](http://php.net/manual/en/)
 
@@ -57,9 +63,11 @@ Boken [High Performance Web Sites Essential Knowledge for Front-End Engineers](h
 
 ### Del 3 - Longpolling
 Http-protokollet är ju stateless, vilket innebär att "riktiga" realtidsapplikationer är omöjliga att implementera. Därav det nya protokollet websocket i HTML5. Poängen med longpolling är att skapa en illusion av att datat uppdateras i realtid. En longpollinglösning består av två delar. Frontend och backend. Det går ut på att det görs en request från klienten, servern svarar inte direkt (såvida den inte har ny data), utan den väntar tills den har ny data eller tiden gått ut.  När klienten fått någon av svaren så upprepas proceduren och en ny request skickas till serversidan.  
-  
+
 Den lösning som implementerats i denna laboration berör filerna MessageBoard.js (frontend), functions.php och get.php (backend). 
-De viktigaste förändringarna som gjordes på klientsidan var att i MessageBoard.getMessages() sätta ett värde för timeout och använda funktionen always för att alltid anropa MessageBoard.getMessages() igen. Det är det som initierar http-förfrågningarna. För att söka efter nya meddelanden, modifierades funktionen getMessages på serversidan att ta det högsta id:t av de redan hämtade meddelandena. En while-loop har lagts till som pollar databasen efter ny data. Loopen körs tills ny data hittats eller maxtiden är uppnådd. Efter att varje databasfråga har körts får loopen "vila" i en sekund, för inte belasta SQL-servern med alldeles för många förfrågningar.
+De viktigaste förändringarna som gjordes på klientsidan var att i MessageBoard.getMessages() sätta ett värde för timeout och använda funktionen always för att alltid anropa MessageBoard.getMessages() igen. Det är det som initierar http-förfrågningarna. För att söka efter nya meddelanden, modifierades funktionen getMessages på serversidan att ta det högsta id:t av de redan hämtade meddelandena. En while-loop har lagts till som pollar databasen efter ny data. Loopen körs tills ny data hittats eller maxtiden är uppnådd. Efter att varje databasfråga har körts får loopen "vila" i en sekund, för inte belasta SQL-servern med alldeles för många förfrågningar.  
+  
+Fördelen med longpolling är att det faktiskt går att implementera en slags realtidslösning, fast protokollet till sin natur är stateless. Nackdelarna är att om besökarna blir många, så belastas webbservern i väldigt hög grad. Varje förfrågan genererar också mycket overhead jämfört med en lösning implementerad med websockets.
 
 ##### Referenser longpolling
 [http://webcooker.net/ajax-polling-requests-php-jquery/](http://webcooker.net/ajax-polling-requests-php-jquery/)  
@@ -69,4 +77,3 @@ De viktigaste förändringarna som gjordes på klientsidan var att i MessageBoar
 Film - [https://www.screenr.com/SNH](https://www.screenr.com/SNH)  
 jQuery AJAX example - [http://tutorials.jenkov.com/jquery/ajax.html](http://tutorials.jenkov.com/jquery/ajax.html)  
 jQuery API documentation - [http://api.jquery.com/](http://api.jquery.com/)
-

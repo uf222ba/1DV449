@@ -181,7 +181,6 @@ var Map = {
                     link.innerHTML = Map.categories[3][eachEvent].getDateText() + " " + Map.categories[3][eachEvent].getTitle();
                     Map.otherEvents.appendChild(link);
                 }
-                //renderEvent(3);
                 break;
             case 4:
                 for(var eachEvent in Map.categories[4]) {

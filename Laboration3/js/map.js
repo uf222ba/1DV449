@@ -78,12 +78,10 @@ var Map = {
 
             for(var i in data.messages) {
 
-                var obj = data.messages[i]; // Gör varje element i arrayen av returnerat data till ett objekt.
-                //Fixa tiden - gör en funktion av det eller lägg till det i prototypen
+                var obj = data.messages[i];
                 var unixTime = obj.createddate.substring(6,19);
                 var e = new Event(obj.id, obj.priority, obj.exactlocation, obj.title, obj.description, unixTime, obj.latitude, obj.longitude, obj.category, obj.subcategory); //new Message(text, new Date());
                 var eventId = Map.events.push(e) - 1;
-                //**Map.renderEvent(eventId, e.getCategory()); // Skriv ut meddelandet i webbläsarfönstret.
             }
 
             Map.events.reverse();   // Eftersom sort-parametern i API:et inte verkar fungera, så får jag vända på innehållet istället
@@ -410,7 +408,7 @@ Event.prototype.getCategoryText = function() {
 
 Event.prototype.getMarkerData = function() {
     var markerArray = [];
-    //markerArray[0] = "<h4>" + this.getTitle() + "</h4>";
+
     markerArray[0] = this.getEventContentHTML();
     markerArray[1] = this.getLatitude();
     markerArray[2] = this.getLongitude();

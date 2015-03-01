@@ -7,7 +7,6 @@
  */
 
 var Map = {
-
     events: [],
     allEvents: null,
     roadTrafficEvents: null,
@@ -217,11 +216,11 @@ var Map = {
 
     deleteMarkers:function() {
         Map.showMarkers = [];
-        //Map.markers = [];
-          // Sets the map on all markers in the array.
+
         for (var i = 0; i < Map.markers.length; i++) {
             Map.markers[i].setMap(null);
         }
+
         Map.marker = [];
         Map.markers = [];
     },
@@ -263,18 +262,11 @@ var Map = {
                         infoWindow.close(Map.openInfoWindow);
                         Map.openInfoWindow = null;
                     }
-                    //infoWindow.setContent(point[i][0]);
                     infoWindow.setContent(point[i][0]);
                     infoWindow.open(Map.map, marker);
                     Map.openInfoWindow = marker;
                 }
             })(marker, i));
-
-            iconCounter++;
-            // We only have a limited number of possible icon colors, so we may have to restart the counter
-            if(iconCounter >= iconsLength) {
-                iconCounter = 0;
-            }
         }
 
         function autoCenter() {

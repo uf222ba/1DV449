@@ -31,7 +31,6 @@ var Map = {
     openInfoWindow: null,
 
     init:function(e) {
-        //Map.initMap();
         Map.allEvents = document.getElementById("allEvents");
         Map.roadTrafficEvents = document.getElementById("roadTrafficEvents");
         Map.publicTranspEvents = document.getElementById("publicTranspEvents");
@@ -55,7 +54,6 @@ var Map = {
     },
 
     initMap:function() {
-
         Map.map = new google.maps.Map(document.getElementById('map'), {
             zoom: 5,
             center: new google.maps.LatLng(62.796353, 15.470043),
